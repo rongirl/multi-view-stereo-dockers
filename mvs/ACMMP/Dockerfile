@@ -1,3 +1,17 @@
+# Copyright (c) 2022, Arabella Gromova, Ivan Moskalenko, Kirill Ivanov, Anastasiia Kornilova
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
 FROM nvidia/cuda:12.0.0-devel-ubuntu22.04
 
 ENV PROJECT_DIR=/mvs
@@ -60,11 +74,3 @@ RUN mkdir build && \
     make -j4
 
 ENTRYPOINT ["python3", "run.py"]
-#RUN git clone https://github.com/GhiXu/ACMMP.git
-#RUN cd ACMMP && \
-#    sed -i "s/-gencode arch=compute_60,code=sm_60/-gencode arch=compute_$CUDA_ARCHITECTURES,code=sm_$CUDA_ARCHITECTURES/" CMakeLists.txt && \
-#    sed -i "s/cuda-8.0/cuda-12.0/" CMakeLists.txt && \
-    # cat CMakeLists.txt && \
-    # cmake . && \
-    # make
- 
