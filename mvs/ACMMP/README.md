@@ -1,6 +1,6 @@
 # ACMMP Docker Image
 This folder contains adapter for [ACMMP](https://github.com/GhiXu/ACMMP) and a docker image
-##Installation 
+## Installation 
 Clone the repo
 ```
 git clone https://github.com/rongirl/multi-view-stereo-dockers.git 
