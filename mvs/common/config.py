@@ -25,6 +25,4 @@ class Var:
     a308_report_name = "Detailed Report A308.txt"
     a311_report_name = "Detailed Report A311.txt"
     image_list_name = "images_list.txt"
-    intrinsics_name = "intrinsic.txt"
-
-   
+    intrinsics_name = "intrinsic.txt"   
