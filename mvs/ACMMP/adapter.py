@@ -14,11 +14,12 @@
 
 import subprocess
 import os
+import type
 
 from pathlib import Path
 
 from common.adapter_base import AdapterBase
-
+from colmap2mvsnet_acm import processing_single_scene
 
 class Adapter(AdapterBase):
     def __init__(
@@ -29,17 +30,20 @@ class Adapter(AdapterBase):
         super().__init__(input_dir, output_dir)
         
     def _convert_colmap_to_mvsnet(self):
-        base_command = "python3 colmap2mvsnet_acm.py"
-        dense_folder = os.path.join(self.input_dir, "dense")
-        dense_folder_param = f"--dense_folder {dense_folder}"
-        output_folder_param = f"--save_folder {self.output_dir}"
-        model_ext_param = f"--model_ext .bin"
+        args = {
+              'dense_folder': f"{dense_folder}",
+              'save_folder': f"--save_folder {self.output_dir}",
+              'max_d': 192, 
+              'interval_scale': 1, 
+              'theta0': 5, 
+              'sigma1': 1, 
+              'sigma2': 10, 
+              'model_ext': ".bin"
+        }
+        args = types.SimpleNamespace(**args)
+        os.makedirs(os.path.join(args.save_folder), exist_ok=True)
+        processing_single_scene(args)
 
-        startup_command = " ".join(
-            [base_command, dense_folder_param, output_folder_param, model_ext_param]
-        )
-        subprocess.run(startup_command, shell=True)
-   
     def _process(self):
         startup_command = f"./build/ACMMP {self.output_dir}"
         subprocess.run(startup_command, shell=True)
