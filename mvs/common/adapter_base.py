@@ -17,7 +17,7 @@ import shutil
 from pathlib import Path
 from abc import ABC, abstractmethod
 
-from  common.config import Var
+from common.config import Var
 from common.sparse_reconstruction.preprocessing import get_intrinsics_from_report
 from common.sparse_reconstruction.feature_extractor import FeatureExtractor
 from common.sparse_reconstruction.feature_matcher import FeatureMatcher
