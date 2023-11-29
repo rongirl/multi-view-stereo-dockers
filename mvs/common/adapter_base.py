@@ -12,10 +12,12 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-from abc import ABC, abstractmethod
-from pathlib import Path
 import shutil
-import os
+
+from pathlib import Path
+from abc import ABC, abstractmethod
+
+from  common.config import Var
 from common.sparse_reconstruction.preprocessing import get_intrinsics_from_report
 from common.sparse_reconstruction.feature_extractor import FeatureExtractor
 from common.sparse_reconstruction.feature_matcher import FeatureMatcher
@@ -38,16 +40,15 @@ class AdapterBase(ABC):
 
     def preprocess(self):
         workdir = Path(self.input_dir)
+        
+        path_to_raw_images = workdir / Var.raw_images_name
+        camera_a308_report = workdir / Var.a308_report_name
+        camera_a311_report = workdir / Var.a311_report_name 
 
-        path_to_raw_images = workdir / "images_raw"
-        camera_a308_report = workdir / "Detailed Report A308.txt"
-        camera_a311_report = workdir / "Detailed Report A311.txt"
-
-        path_to_preprocessed = workdir / "images"
-        if os.path.exists(path_to_preprocessed):
+        path_to_preprocessed = workdir / Var.images_name
+        if path_to_preprocessed.exists():
             shutil.rmtree(path_to_preprocessed)
         path_to_preprocessed.mkdir(exist_ok=False)          
-        print(path_to_preprocessed)
         intrinsics = dict()
         intrinsics["a308_0"], intrinsics["a308_1"] = get_intrinsics_from_report(
             camera_a308_report
@@ -60,27 +61,27 @@ class AdapterBase(ABC):
             subfolder = path_to_preprocessed / camera
             subfolder.mkdir()
 
-            with open(subfolder / "intrinsic.txt", "w") as intrinsics_file:
+            with open(subfolder / Var.intrinsics_name, "w") as intrinsics_file:
                 intrinsics_file.write(
                     f"{intrinsic.f} {intrinsic.cx} {intrinsic.cy} {intrinsic.k}"
                 )
 
+        cameras = ["a308_0", "a308_1", "a311_0", "a311_1"]
+
         raw_images = path_to_raw_images.iterdir()
         for raw_image in raw_images:
             raw_image_name = raw_image.name
-
             match len(raw_image_name), int(raw_image_name[-5]):
-                case 16, 0:
-                    chosen_camera = "a308_0"
-                case 16, 1:
-                    chosen_camera = "a308_1"
-                case 21, 0:
-                    chosen_camera = "a311_0"
-                case 21, 1:
-                    chosen_camera = "a311_1"
+                case Var.images_308_name_len, Var.camera_number_0:
+                    chosen_camera = cameras[0]
+                case Var.images_308_name_len, Var.camera_number_1:
+                    chosen_camera = cameras[1]
+                case Var.images_311_name_len, Var.camera_number_0:
+                    chosen_camera = cameras[2]
+                case Var.images_311_name_len, Var.camera_number_1:
+                    chosen_camera = cameras[3]
                 case _:
                     raise ValueError("Invalid image name")
-
             shutil.copyfile(
                 raw_image, path_to_preprocessed / chosen_camera / raw_image_name
             )
@@ -89,21 +90,21 @@ class AdapterBase(ABC):
             camera_name = cam_subfolder.name
 
             images_list = sorted(cam_subfolder.iterdir())[:-1]
-            with open(cam_subfolder / "images_list.txt", "w") as images_list_file:
+            with open(cam_subfolder / Var.image_list_name, "w") as images_list_file:
                 for image in images_list:
                     images_list_file.write(f"{camera_name}/{image.name}\n")
 
     def _sparse_reconstruction(self):
         workdir = Path(self.input_dir)
-
-        database_path = workdir / "database.db"
-        images_path = workdir / "images"
-        sparse_reconstruction_path = workdir / "sparse"
-        dense_reconstruction_path = workdir / "dense"
         
-        if os.path.exists(sparse_reconstruction_path):
+        database_path = workdir / Var.database_name 
+        images_path = workdir / Var.images_name
+        sparse_reconstruction_path = workdir / Var.sparse_name 
+        dense_reconstruction_path = workdir / Var.dense_name 
+        
+        if sparse_reconstruction_path.exists():
             shutil.rmtree(sparse_reconstruction_path)
-        if os.path.exists(dense_reconstruction_path):
+        if dense_reconstruction_path.exists(): 
             shutil.rmtree(dense_reconstruction_path)
         sparse_reconstruction_path.mkdir(exist_ok=False)
         dense_reconstruction_path.mkdir(exist_ok=False)

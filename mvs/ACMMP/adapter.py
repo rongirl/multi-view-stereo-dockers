@@ -12,10 +12,13 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-from pathlib import Path
-from common.adapter_base import AdapterBase
 import subprocess
 import os
+
+from pathlib import Path
+
+from common.adapter_base import AdapterBase
+
 
 class Adapter(AdapterBase):
     def __init__(
@@ -36,7 +39,7 @@ class Adapter(AdapterBase):
             [base_command, dense_folder_param, output_folder_param, model_ext_param]
         )
         subprocess.run(startup_command, shell=True)
-
+   
     def _process(self):
         startup_command = f"./build/ACMMP {self.output_dir}"
         subprocess.run(startup_command, shell=True)

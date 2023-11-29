@@ -42,5 +42,4 @@ class Undistorter:
 
     def undistort(self):
         startup_command = self._get_startup_command()
-
         subprocess.run(startup_command, shell=True)

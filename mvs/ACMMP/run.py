@@ -13,9 +13,10 @@
 # limitations under the License.
 
 import argparse
-from adapter import Adapter
+
 from pathlib import Path
-import sys
+
+from adapter import Adapter
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
@@ -35,7 +36,6 @@ if __name__ == "__main__":
     )  
 
     args = parser.parse_args()
-    print(sys.path)
     Adapter(
         input_dir=args.input_dir,
         output_dir=args.output_dir

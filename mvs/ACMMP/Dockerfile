@@ -46,10 +46,11 @@ RUN apt-get update && apt-get install -y \
     libqt5opengl5-dev \
     libcgal-dev \
     libceres-dev \
-    python3-pip
+    python3-pip && \
+    rm -rf /var/lib/apt/lists/*    
 
-RUN git clone https://github.com/colmap/colmap.git
-RUN cd colmap && \
+RUN git clone https://github.com/colmap/colmap.git && \
+    cd colmap && \
     git fetch https://github.com/colmap/colmap.git ${COLMAP_GIT_COMMIT} && \
     git checkout FETCH_HEAD && \
     mkdir build && \
@@ -59,8 +60,9 @@ RUN cd colmap && \
     ninja install && \
     cd .. && rm -rf colmap
 
-RUN pip install numpy==1.22.0 \
-    opencv-python==4.8.0.76
+COPY $ALGORITHM_FOLDER/requirements.txt requirements.txt
+
+RUN python3 -m pip install --no-cache-dir -r requirements.txt
 
 COPY $ALGORITHM_FOLDER  .
 
@@ -68,9 +70,10 @@ COPY ./common ./common
 
 RUN mkdir build && \
     cd build && \
-    sed -i "s/-gencode arch=compute_60,code=sm_60/-gencode arch=compute_$CUDA_ARCHITECTURES,code=sm_$CUDA_ARCHITECTURES/" ../CMakeLists.txt && \
-    sed -i "s/cuda-8.0/cuda-12.0/" ../CMakeLists.txt && \
-    cmake .. && \
+    sed -i "s/-gencode arch=compute_60,code=sm_60/-gencode arch=compute_$CUDA_ARCHITECTURES,code=sm_$CUDA_ARCHITECTURES/" ../cpp/CMakeLists.txt && \
+    sed -i "s/cuda-8.0/cuda-12.0/" ../cpp/CMakeLists.txt && \
+    cmake ../cpp && \
     make -j4
+
 
 ENTRYPOINT ["python3", "run.py"]
