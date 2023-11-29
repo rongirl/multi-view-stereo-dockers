@@ -75,5 +75,4 @@ RUN mkdir build && \
     cmake ../cpp && \
     make -j4
 
-
 ENTRYPOINT ["python3", "run.py"]

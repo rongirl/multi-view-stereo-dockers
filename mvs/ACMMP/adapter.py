@@ -14,7 +14,7 @@
 
 import subprocess
 import os
-import type
+import types
 
 from pathlib import Path
 
@@ -30,9 +30,10 @@ class Adapter(AdapterBase):
         super().__init__(input_dir, output_dir)
         
     def _convert_colmap_to_mvsnet(self):
+        dense_folder = os.path.join(self.input_dir, "dense")
         args = {
               'dense_folder': f"{dense_folder}",
-              'save_folder': f"--save_folder {self.output_dir}",
+              'save_folder': f"{self.output_dir}",
               'max_d': 192, 
               'interval_scale': 1, 
               'theta0': 5, 
