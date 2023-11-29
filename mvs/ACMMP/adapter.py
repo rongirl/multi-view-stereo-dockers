@@ -19,7 +19,9 @@ import types
 from pathlib import Path
 
 from common.adapter_base import AdapterBase
+from common.config import Var
 from colmap2mvsnet_acm import processing_single_scene
+
 
 class Adapter(AdapterBase):
     def __init__(
@@ -30,7 +32,7 @@ class Adapter(AdapterBase):
         super().__init__(input_dir, output_dir)
         
     def _convert_colmap_to_mvsnet(self):
-        dense_folder = os.path.join(self.input_dir, "dense")
+        dense_folder = Path(self.input_dir) / Var.dense_name 
         args = {
               'dense_folder': f"{dense_folder}",
               'save_folder': f"{self.output_dir}",
@@ -42,7 +44,7 @@ class Adapter(AdapterBase):
               'model_ext': ".bin"
         }
         args = types.SimpleNamespace(**args)
-        os.makedirs(os.path.join(args.save_folder), exist_ok=True)
+        Path(args.save_folder).mkdir(exist_ok=True)   
         processing_single_scene(args)
 
     def _process(self):
