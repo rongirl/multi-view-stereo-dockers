@@ -17,7 +17,7 @@ To run the container use the following command:
 ```
 docker run --gpus all --rm \
 -v <IMAGES_PATH>:/mvs/working \
--v <OUTPUT_PATH>:/mvs/result \ 
+-v <OUTPUT_PATH>:/mvs/result \
 acmmp [OPTIONAL_ARGS]
 ```
 
