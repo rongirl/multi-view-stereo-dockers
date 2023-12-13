@@ -31,14 +31,14 @@ class AdapterBase(ABC):
         self.output_dir = output_dir
     
     def run(self):
-        self.preprocess()
+        self._preprocess()
         self._sparse_reconstruction()
         self._convert_colmap_to_mvsnet()
         self._load_model()
         self._process()     
         self._postprocess()
 
-    def preprocess(self):
+    def _preprocess(self):
         workdir = Path(self.input_dir)
         
         path_to_raw_images = workdir / Var.raw_images_name
