@@ -105,8 +105,8 @@ class Adapter(AdapterBase):
     def __save_images_cameras(self, filename, camera, image, outdir):
         image = image[0].numpy()  
         camera = camera[0]           
-        cam_filename = ''.join([outdir + filename.format(Var.cameras, Var.cameras_format)])
-        img_filename = ''.join([outdir + filename.format(Var.images_name, Var.format_images)])
+        cam_filename = ''.join([outdir, filename.format(Var.cameras, Var.cameras_format)])
+        img_filename = ''.join([outdir, filename.format(Var.images_name, Var.format_images)])
         Path(cam_filename).touch(exist_ok=True)
         Path(img_filename).touch(exist_ok=True)           
         write_cam(cam_filename, camera)
@@ -115,7 +115,7 @@ class Adapter(AdapterBase):
         cv2.imwrite(img_filename, img_bgr)
     
     def __save_confidence_maps(self, filename, photometric_confidence, confidence_list, outdir, levels):
-        confidence_filename = ''.join([outdir + filename.format(Var.confidence, Var.format_pfm)])
+        confidence_filename = ''.join([outdir, filename.format(Var.confidence, Var.format_pfm)])
         Path(confidence_filename).touch(exist_ok=True)    
         for stage_idx, photometric_confidence in enumerate(confidence_list):
             if stage_idx != levels - 1:
