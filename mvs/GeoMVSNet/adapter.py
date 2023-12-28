@@ -145,7 +145,8 @@ class Adapter(AdapterBase):
                 cams = sample["proj_matrices"]["stage{}".format(args.levels)].numpy()
                 imgs = sample["imgs"]
                 logging.info('Iter {}/{}, Time:{:.3f} Res:{}'.format(batch_idx, len(TestImgLoader), end_time - start_time, imgs[0].shape))
-                for filename, cam, img, depth_est, photometric_confidence in zip(filenames, cams, imgs, outputs["depth"], outputs["photometric_confidence"]):
+                for filename, cam, img, depth_est, photometric_confidence in zip(filenames, cams, imgs, outputs["depth"],
+		 outputs["photometric_confidence"]):
                     path_depth_est = Path(args.outdir) / Var.depth_est
                     Path(path_depth_est).mkdir(parents=True, exist_ok=True)
                     self.__save_depth_maps(filename, depth_est, outdir=args.outdir)
