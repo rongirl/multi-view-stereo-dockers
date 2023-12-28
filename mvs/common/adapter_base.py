@@ -34,7 +34,6 @@ class AdapterBase(ABC):
         self._preprocess()
         self._sparse_reconstruction()
         self._convert_colmap_to_mvsnet()
-        self._load_model()
         self._process()     
         self._postprocess()
 
@@ -71,17 +70,22 @@ class AdapterBase(ABC):
         raw_images = path_to_raw_images.iterdir()
         for raw_image in raw_images:
             raw_image_name = raw_image.name
-            match len(raw_image_name), int(raw_image_name[-5]):
-                case Var.images_308_name_len, Var.camera_number_0:
+            if len(raw_image_name) ==  Var.images_308_name_len:
+                if int(raw_image_name[-5]) == Var.camera_number_0:
                     chosen_camera = cameras[0]
-                case Var.images_308_name_len, Var.camera_number_1:
+                elif int(raw_image_name[-5]) == Var.camera_number_1:
                     chosen_camera = cameras[1]
-                case Var.images_311_name_len, Var.camera_number_0:
-                    chosen_camera = cameras[2]
-                case Var.images_311_name_len, Var.camera_number_1:
-                    chosen_camera = cameras[3]
-                case _:
+                else:
                     raise ValueError("Invalid image name")
+            elif len(raw_image_name) == Var.images_311_name_len:
+                if int(raw_image_name[-5]) == Var.camera_number_0:
+                    chosen_camera = cameras[2]
+                elif int(raw_image_name[-5]) == Var.camera_number_1:
+                    chosen_camera = cameras[3]
+                else:
+                    raise ValueError("Invalid image name")
+            else:
+                raise ValueError("Invalid image name")
             shutil.copyfile(
                 raw_image, path_to_preprocessed / chosen_camera / raw_image_name
             )
@@ -144,4 +148,3 @@ class AdapterBase(ABC):
     @abstractmethod
     def _postprocess(self):
         pass
-

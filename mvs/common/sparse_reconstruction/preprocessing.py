@@ -20,7 +20,7 @@ from pathlib import Path
 Intrinsics = namedtuple("Intrinsics", "f cx cy k")
 
 
-def convert_intrinsics(intrinsics_raw: list[str]) -> Intrinsics:
+def convert_intrinsics(intrinsics_raw: list) -> Intrinsics:
     height, width, focal_length, dx, dy, k = [float(x) for x in intrinsics_raw]
 
     cx = width / 2 + dx
