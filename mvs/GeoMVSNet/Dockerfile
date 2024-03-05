@@ -4,6 +4,10 @@ ENV PROJECT_DIR=/mvs
 
 ENV DEBIAN_FRONTEND=noninteractive
 
+ARG COLMAP_GIT_COMMIT=main
+
+ARG GEOMVSNET_MODEL=checkpoints/model_geomvsnet_release.ckpt
+
 ARG ALGORITHM_FOLDER=GeoMVSNet
 
 ARG CUDA_ARCHITECTURES=native
@@ -50,7 +54,7 @@ COPY $ALGORITHM_FOLDER/requirements.txt requirements.txt
 RUN python3 -m pip install --no-cache-dir gdown -r requirements.txt
 
 RUN mkdir checkpoints \
-    && gdown "147_UbjE87E-HB9sZ5yLDbckynH825nJd" -O checkpoints/model_geomvsnet_release.ckpt
+    && gdown "147_UbjE87E-HB9sZ5yLDbckynH825nJd" -O ${GEOMVSNET_MODEL}
 
 COPY $ALGORITHM_FOLDER .
 

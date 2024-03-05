@@ -1,4 +1,4 @@
-# Copyright (c) 2022, Arabella Gromova, Ivan Moskalenko, Kirill Ivanov, Anastasiia Kornilova
+# Copyright (c) 2024, Arabella Gromova, Ivan Moskalenko, Kirill Ivanov, Anastasiia Kornilova
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -14,8 +14,6 @@
 
 import argparse
 
-from pathlib import Path
-
 from adapter import Adapter
 
 if __name__ == "__main__":
@@ -27,16 +25,16 @@ if __name__ == "__main__":
         help="Path to the images and information about images",
         default="/mvs/working",
     )
-    
+
     parser.add_argument(
-        "--output_dir", 
+        "--output_dir",
         type=str,
         help="Path to the dense reconstruction",
         default="/mvs/result",
-    )  
+    )
 
     args = parser.parse_args()
     Adapter(
-        input_dir=args.input_dir,
+        input_dir=args.input_dir, 
         output_dir=args.output_dir
     ).run()
