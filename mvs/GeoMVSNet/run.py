@@ -34,7 +34,4 @@ if __name__ == "__main__":
     )
 
     args = parser.parse_args()
-    Adapter(
-        input_dir=args.input_dir, 
-        output_dir=args.output_dir
-    ).run()
+    Adapter(input_dir=args.input_dir, output_dir=args.output_dir).run()

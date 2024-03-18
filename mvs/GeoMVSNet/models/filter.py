@@ -17,12 +17,12 @@ def frequency_domain_filter(depth, rho_ratio):
     fshift = torch.fft.fftshift(f)
 
     b, h, w = depth.shape
-    k_h, k_w = h/rho_ratio, w/rho_ratio
+    k_h, k_w = h / rho_ratio, w / rho_ratio
 
-    fshift[:,:int(h/2-k_h/2),:] = 0
-    fshift[:,int(h/2+k_h/2):,:] = 0
-    fshift[:,:,:int(w/2-k_w/2)] = 0
-    fshift[:,:,int(w/2+k_w/2):] = 0
+    fshift[:, : int(h / 2 - k_h / 2), :] = 0
+    fshift[:, int(h / 2 + k_h / 2) :, :] = 0
+    fshift[:, :, : int(w / 2 - k_w / 2)] = 0
+    fshift[:, :, int(w / 2 + k_w / 2) :] = 0
 
     ishift = torch.fft.ifftshift(fshift)
     idepth = torch.fft.ifft2(ishift)
@@ -35,4 +35,4 @@ def visual_fft_fig(fshift):
     fft_fig = torch.abs(20 * torch.log(fshift))
     plt.figure(figsize=(10, 10))
     plt.subplot(121)
-    plt.imshow(fft_fig[0,:,:], cmap = 'gray')
+    plt.imshow(fft_fig[0, :, :], cmap="gray")

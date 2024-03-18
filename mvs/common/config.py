@@ -26,7 +26,7 @@ class Var:
     a308_report_name = "Detailed Report A308.txt"
     a311_report_name = "Detailed Report A311.txt"
     image_list_name = "images_list.txt"
-    intrinsics_name = "intrinsic.txt"   
+    intrinsics_name = "intrinsic.txt"
     open3d_ply = "open3d_fusion_plys"
     depth_est = "depth_est"
     format_pfm = ".pfm"
