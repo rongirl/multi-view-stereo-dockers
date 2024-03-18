@@ -43,7 +43,9 @@ def tensor2float(vars):
     elif isinstance(vars, torch.Tensor):
         return vars.data.item()
     else:
-        raise NotImplementedError("invalid input type {} for tensor2float".format(type(vars)))
+        raise NotImplementedError(
+            "invalid input type {} for tensor2float".format(type(vars))
+        )
 
 
 @make_recursive_func
@@ -53,7 +55,9 @@ def tensor2numpy(vars):
     elif isinstance(vars, torch.Tensor):
         return vars.detach().cpu().numpy().copy()
     else:
-        raise NotImplementedError("invalid input type {} for tensor2numpy".format(type(vars)))
+        raise NotImplementedError(
+            "invalid input type {} for tensor2numpy".format(type(vars))
+        )
 
 
 @make_recursive_func
@@ -63,18 +67,20 @@ def tocuda(vars):
     elif isinstance(vars, str):
         return vars
     else:
-        raise NotImplementedError("invalid input type {} for tensor2numpy".format(type(vars)))
+        raise NotImplementedError(
+            "invalid input type {} for tensor2numpy".format(type(vars))
+        )
 
 
 def tb_save_scalars(logger, mode, scalar_dict, global_step):
     scalar_dict = tensor2float(scalar_dict)
     for key, value in scalar_dict.items():
         if not isinstance(value, (list, tuple)):
-            name = '{}/{}'.format(mode, key)
+            name = "{}/{}".format(mode, key)
             logger.add_scalar(name, value, global_step)
         else:
             for idx in range(len(value)):
-                name = '{}/{}_{}'.format(mode, key, idx)
+                name = "{}/{}_{}".format(mode, key, idx)
                 logger.add_scalar(name, value[idx], global_step)
 
 
@@ -83,7 +89,9 @@ def tb_save_images(logger, mode, images_dict, global_step):
 
     def preprocess(name, img):
         if not (len(img.shape) == 3 or len(img.shape) == 4):
-            raise NotImplementedError("invalid img shape {}:{} in save_images".format(name, img.shape))
+            raise NotImplementedError(
+                "invalid img shape {}:{} in save_images".format(name, img.shape)
+            )
         if len(img.shape) == 3:
             img = img[:, np.newaxis, :, :]
         img = torch.from_numpy(img[:1])
@@ -91,11 +99,11 @@ def tb_save_images(logger, mode, images_dict, global_step):
 
     for key, value in images_dict.items():
         if not isinstance(value, (list, tuple)):
-            name = '{}/{}'.format(mode, key)
+            name = "{}/{}".format(mode, key)
             logger.add_image(name, preprocess(name, value), global_step)
         else:
             for idx in range(len(value)):
-                name = '{}/{}_{}'.format(mode, key, idx)
+                name = "{}/{}_{}".format(mode, key, idx)
                 logger.add_image(name, preprocess(name, value[idx]), global_step)
 
 
@@ -159,6 +167,8 @@ def AbsDepthError_metrics(depth_est, depth_gt, mask, thres=None):
 
 
 import torch.distributed as dist
+
+
 def synchronize():
     """
     Helper function to synchronize (barrier) among all processes when
@@ -205,6 +215,8 @@ def reduce_scalar_outputs(scalar_outputs):
 
 import torch
 from bisect import bisect_right
+
+
 class WarmupMultiStepLR(torch.optim.lr_scheduler._LRScheduler):
     def __init__(
         self,
@@ -249,7 +261,7 @@ class WarmupMultiStepLR(torch.optim.lr_scheduler._LRScheduler):
             for base_lr in self.base_lrs
         ]
 
-    
+
 def set_random_seed(seed):
     random.seed(seed)
     np.random.seed(seed)

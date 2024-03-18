@@ -71,7 +71,7 @@ class AdapterBase(ABC):
         raw_images = path_to_raw_images.iterdir()
         for raw_image in raw_images:
             raw_image_name = raw_image.name
-            if len(raw_image_name) ==  Var.images_308_name_len:
+            if len(raw_image_name) == Var.images_308_name_len:
                 if int(raw_image_name[-5]) == Var.camera_number_0:
                     chosen_camera = cameras[0]
                 elif int(raw_image_name[-5]) == Var.camera_number_1:
