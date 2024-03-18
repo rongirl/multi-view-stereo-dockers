@@ -27,16 +27,13 @@ if __name__ == "__main__":
         help="Path to the images and information about images",
         default="/mvs/working",
     )
-    
+
     parser.add_argument(
-        "--output_dir", 
+        "--output_dir",
         type=str,
         help="Path to the dense reconstruction",
         default="/mvs/result",
-    )  
+    )
 
     args = parser.parse_args()
-    Adapter(
-        input_dir=args.input_dir,
-        output_dir=args.output_dir
-    ).run()
+    Adapter(input_dir=args.input_dir, output_dir=args.output_dir).run()
