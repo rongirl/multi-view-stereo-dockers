@@ -29,25 +29,26 @@ class AdapterBase(ABC):
     def __init__(self, input_dir: Path, output_dir: Path):
         self.input_dir = input_dir
         self.output_dir = output_dir
-    
+
     def run(self):
         self._preprocess()
         self._sparse_reconstruction()
         self._convert_colmap_to_mvsnet()
-        self._process()     
+        self._load_model()
+        self._process()
         self._postprocess()
 
     def _preprocess(self):
         workdir = Path(self.input_dir)
-        
+
         path_to_raw_images = workdir / Var.raw_images_name
         camera_a308_report = workdir / Var.a308_report_name
-        camera_a311_report = workdir / Var.a311_report_name 
+        camera_a311_report = workdir / Var.a311_report_name
 
         path_to_preprocessed = workdir / Var.images_name
         if path_to_preprocessed.exists():
             shutil.rmtree(path_to_preprocessed)
-        path_to_preprocessed.mkdir(exist_ok=False)          
+        path_to_preprocessed.mkdir(exist_ok=False)
         intrinsics = dict()
         intrinsics["a308_0"], intrinsics["a308_1"] = get_intrinsics_from_report(
             camera_a308_report
@@ -100,21 +101,24 @@ class AdapterBase(ABC):
 
     def _sparse_reconstruction(self):
         workdir = Path(self.input_dir)
-        
-        database_path = workdir / Var.database_name 
+
+        database_path = workdir / Var.database_name
         images_path = workdir / Var.images_name
-        sparse_reconstruction_path = workdir / Var.sparse_name 
-        dense_reconstruction_path = workdir / Var.dense_name 
-        
+        sparse_reconstruction_path = workdir / Var.sparse_name
+        dense_reconstruction_path = workdir / Var.dense_name
+
         if sparse_reconstruction_path.exists():
             shutil.rmtree(sparse_reconstruction_path)
-        if dense_reconstruction_path.exists(): 
+        if dense_reconstruction_path.exists():
             shutil.rmtree(dense_reconstruction_path)
         sparse_reconstruction_path.mkdir(exist_ok=False)
         dense_reconstruction_path.mkdir(exist_ok=False)
 
         feature_extractor = FeatureExtractor(
-            database_path, images_path, init_camera_params=True, one_camera_per_folder=True
+            database_path,
+            images_path,
+            init_camera_params=True,
+            one_camera_per_folder=True,
         )
         feature_matcher = FeatureMatcher(database_path)
         sparse_reconstructor = SparseReconstructor(
@@ -132,7 +136,7 @@ class AdapterBase(ABC):
         feature_matcher.match_features()
         sparse_reconstructor.get_sparse_reconstruction()
         undistorter.undistort()
-    
+
     @abstractmethod
     def _convert_colmap_to_mvsnet(self) -> None:
         pass

@@ -41,10 +41,10 @@ class FeatureExtractor:
         base_command = f"colmap feature_extractor"
         database_param = f"--database_path {self.database_path}"
         images_param = f"--image_path {self.image_path}"
-        
+
         subfolders = sorted(self.image_path.iterdir())
         image_list_paths = [subfolder / Var.image_list_name for subfolder in subfolders]
-        intrinsics_paths = [subfolder / Var.intrinsics_name  for subfolder in subfolders]
+        intrinsics_paths = [subfolder / Var.intrinsics_name for subfolder in subfolders]
         startup_commands = []
         for image_list_path, intrinsics_path in zip(image_list_paths, intrinsics_paths):
             image_list_param = f"--image_list_path {image_list_path}"
@@ -66,7 +66,7 @@ class FeatureExtractor:
                 intrinsics = ", ".join(intrinsics)
                 camera_param = f'--ImageReader.camera_params "{intrinsics}"'
                 startup_command.append(camera_param)
-         
+
             startup_commands.append(" ".join(startup_command))
 
         return startup_commands
@@ -75,4 +75,3 @@ class FeatureExtractor:
         startup_commands = self._get_startup_commands()
         for startup_command in startup_commands:
             subprocess.run(startup_command, shell=True)
-
