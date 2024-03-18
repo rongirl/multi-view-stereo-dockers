@@ -30,21 +30,21 @@ class Adapter(AdapterBase):
         output_dir: Path,
     ):
         super().__init__(input_dir, output_dir)
-        
+
     def _convert_colmap_to_mvsnet(self):
-        dense_folder = Path(self.input_dir) / Var.dense_name 
+        dense_folder = Path(self.input_dir) / Var.dense_name
         args = {
-              'dense_folder': f"{dense_folder}",
-              'save_folder': f"{self.output_dir}",
-              'max_d': 192, 
-              'interval_scale': 1, 
-              'theta0': 5, 
-              'sigma1': 1, 
-              'sigma2': 10, 
-              'model_ext': ".bin"
+            "dense_folder": f"{dense_folder}",
+            "save_folder": f"{self.output_dir}",
+            "max_d": 192,
+            "interval_scale": 1,
+            "theta0": 5,
+            "sigma1": 1,
+            "sigma2": 10,
+            "model_ext": ".bin",
         }
         args = types.SimpleNamespace(**args)
-        Path(args.save_folder).mkdir(exist_ok=True)   
+        Path(args.save_folder).mkdir(exist_ok=True)
         processing_single_scene(args)
 
     def _process(self):
@@ -56,6 +56,6 @@ class Adapter(AdapterBase):
 
     def _preprocess(self):
         pass
-  
-    def _postprocess(self): 
-        pass       
+
+    def _postprocess(self):
+        pass

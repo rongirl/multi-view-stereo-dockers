@@ -11,7 +11,8 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-   
+
+
 class Var:
     images_308_name_len = 16
     images_311_name_len = 21
@@ -25,4 +26,4 @@ class Var:
     a308_report_name = "Detailed Report A308.txt"
     a311_report_name = "Detailed Report A311.txt"
     image_list_name = "images_list.txt"
-    intrinsics_name = "intrinsic.txt"   
+    intrinsics_name = "intrinsic.txt"
