@@ -35,3 +35,4 @@ class Var:
     format_images = ".jpg"
     confidence = "confidence"
     stage = "_stage"
+    file_point_cloud = "fused.ply"
