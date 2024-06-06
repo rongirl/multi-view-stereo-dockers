@@ -18,8 +18,6 @@ ENV PROJECT_DIR=/mvs
  
 ENV DEBIAN_FRONTEND=noninteractive
 
-ARG COLMAP_GIT_COMMIT=main
-
 ARG ALGORITHM_FOLDER=COLMAP
 
 ARG CUDA_ARCHITECTURES=native
@@ -53,7 +51,7 @@ RUN apt-get update && apt-get install -y \
 
 RUN git clone https://github.com/colmap/colmap.git && \
     cd colmap && \
-    git fetch https://github.com/colmap/colmap.git ${COLMAP_GIT_COMMIT} && \
+    git fetch https://github.com/colmap/colmap.git && \
     git checkout FETCH_HEAD && \
     mkdir build && \
     cd build && \
