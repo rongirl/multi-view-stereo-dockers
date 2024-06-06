@@ -1,4 +1,4 @@
-# Copyright (c) 2022, Arabella Gromova, Ivan Moskalenko, Kirill Ivanov, Anastasiia Kornilova
+# Copyright (c) 2024, Arabella Gromova, Ivan Moskalenko, Kirill Ivanov, Anastasiia Kornilova
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -17,6 +17,8 @@ FROM nvidia/cuda:12.0.0-devel-ubuntu22.04
 ENV PROJECT_DIR=/mvs
  
 ENV DEBIAN_FRONTEND=noninteractive
+
+ARG COLMAP_GIT_COMMIT=main
 
 ARG ALGORITHM_FOLDER=COLMAP
 

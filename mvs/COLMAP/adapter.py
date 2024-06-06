@@ -1,4 +1,4 @@
-# Copyright (c) 2022, Arabella Gromova, Ivan Moskalenko, Kirill Ivanov, Anastasiia Kornilova
+# Copyright (c) 2024, Arabella Gromova, Ivan Moskalenko, Kirill Ivanov, Anastasiia Kornilova
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -16,6 +16,7 @@ import os
 import subprocess
 import types
 from pathlib import Path
+from shutil import copytree
 
 from common.adapter_base import AdapterBase
 from common.config import Var
@@ -39,12 +40,14 @@ class Adapter(AdapterBase):
         workspace_path = f"--workspace_path {dense_folder}"
         workspace_format = f"--workspace_format COLMAP"
         patch_match_stereo = f"--PatchMatchStereo.geom_consistency {geom_consistency}"
+        gpu_index = f"--PatchMatchStereo.gpu_index=0,1"
         startup_command = " ".join(
             [
                 base_command,
                 workspace_path,
                 workspace_format,
                 patch_match_stereo,
+                gpu_index,
             ]
         )
         subprocess.run(startup_command, shell=True)
@@ -57,11 +60,11 @@ class Adapter(AdapterBase):
 
     def _postprocess(self):
         dense_folder = Path(self.input_dir) / Var.dense_name
-        path_to_ply = Path(self.output_dir) / Var.file_point_cloud
+        path_to_ply = Path(dense_folder) / Var.file_point_cloud
         base_command = f"colmap stereo_fusion"
         workspace_path = f"--workspace_path {dense_folder}"
         workspace_format = f"--workspace_format COLMAP"
-        input_type = f"--input_type geometric"
+        input_type = f"--input_type photometric"
         output_path = f"--output_path {path_to_ply}"
         startup_command = " ".join(
             [
@@ -73,3 +76,4 @@ class Adapter(AdapterBase):
             ]
         )
         subprocess.run(startup_command, shell=True)
+        copytree(dense_folder, self.output_dir, dirs_exist_ok=True)
