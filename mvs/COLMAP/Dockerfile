@@ -51,8 +51,6 @@ RUN apt-get update && apt-get install -y \
 
 RUN git clone https://github.com/colmap/colmap.git && \
     cd colmap && \
-    git fetch https://github.com/colmap/colmap.git && \
-    git checkout FETCH_HEAD && \
     mkdir build && \
     cd build && \
     cmake .. -GNinja -DCMAKE_CUDA_ARCHITECTURES=${CUDA_ARCHITECTURES} && \
