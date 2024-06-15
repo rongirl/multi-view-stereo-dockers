@@ -102,7 +102,7 @@ class Adapter(AdapterBase):
                 for i in range(len(res)):
                     x, y, z = res[i]
                     if 0 <= x < width and 0 <= y < height:
-                        blue, green, red = img[int(y)][int(x)]
+                        blue, green, red = img[y][x]
                         np.asarray(pcd.colors)[indices[i]] = (
                             np.array([red, green, blue]) / 255.0
                         )
