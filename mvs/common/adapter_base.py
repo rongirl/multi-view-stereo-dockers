@@ -42,6 +42,8 @@ class AdapterBase(ABC):
         workdir = Path(self.input_dir)
 
         path_to_raw_images = workdir / Var.raw_images_name
+        if not path_to_raw_images.exists():
+            return
         camera_a308_report = workdir / Var.a308_report_name
         camera_a311_report = workdir / Var.a311_report_name
 
@@ -102,10 +104,13 @@ class AdapterBase(ABC):
     def _sparse_reconstruction(self):
         workdir = Path(self.input_dir)
 
+        path_to_raw_images = workdir / Var.raw_images_name
         database_path = workdir / Var.database_name
         images_path = workdir / Var.images_name
         sparse_reconstruction_path = workdir / Var.sparse_name
         dense_reconstruction_path = workdir / Var.dense_name
+        init_camera_params = True
+        one_camera_per_folder = True
 
         if sparse_reconstruction_path.exists():
             shutil.rmtree(sparse_reconstruction_path)
@@ -114,12 +119,17 @@ class AdapterBase(ABC):
         sparse_reconstruction_path.mkdir(exist_ok=False)
         dense_reconstruction_path.mkdir(exist_ok=False)
 
+        if not path_to_raw_images.exists():
+            init_camera_params = False
+            one_camera_per_folder = False
+
         feature_extractor = FeatureExtractor(
             database_path,
             images_path,
-            init_camera_params=True,
-            one_camera_per_folder=True,
+            init_camera_params=init_camera_params,
+            one_camera_per_folder=one_camera_per_folder,
         )
+
         feature_matcher = FeatureMatcher(database_path)
         sparse_reconstructor = SparseReconstructor(
             database_path,
