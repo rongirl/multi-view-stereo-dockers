@@ -6,15 +6,17 @@ View selection is modified according to COLMAP's strategy, Qingshan Xu
 """
 
 from __future__ import print_function
-import collections
-import struct
-import numpy as np
-import multiprocessing as mp
-from functools import partial
-import os
+
 import argparse
+import collections
+import multiprocessing as mp
+import os
 import shutil
+import struct
+from functools import partial
+
 import cv2
+import numpy as np
 
 # ============================ read_model.py ============================#
 CameraModel = collections.namedtuple(
@@ -363,7 +365,7 @@ def calc_score(inputs, images, points3d, extrinsic, args):
     return i, j, score
 
 
-def processing_single_scene(args):
+def processing_single_scene(args, dict):
 
     image_dir = os.path.join(args.dense_folder, "images")
     model_dir = os.path.join(args.dense_folder, "sparse")
@@ -564,6 +566,7 @@ def processing_single_scene(args):
                 os.path.join(image_dir, images[i + 1].name),
                 os.path.join(image_converted_dir, "%08d.jpg" % i),
             )
+        dict[images[i + 1].name[7:][:-4]] = "%08d" % i
 
 
 if __name__ == "__main__":
